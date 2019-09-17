@@ -187,6 +187,9 @@ The tool accepts the following parameters:
   -t  Terraform resources to target only, (-t resourcetype.resource resourcetype2.resource2)
   -u	Fetch and update modules from remote repo
   -destroy	Terraform destroy
+  -c	Terraform Console
+  -v	Terraform Validate ('-type json' for JSON output)
+  -g	Terraform Graph (Optional: Type of graph output: '-type plan|plan-destroy|-apply|refresh|validate'. Max module depth: '-type n', where n is numeric. Highlight cycles with coloured edges: '-type cycles'). Run 'tholos -g <parameters> | tail +3 > output', then use dot (via GraphViz) to convert into an svg file: 'dot -Tsvg output > graph.svg'
 
 ```
 
