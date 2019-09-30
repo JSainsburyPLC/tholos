@@ -81,7 +81,7 @@ func ExecOsCmd(cmdPath string, args []string) bool {
 		log.Printf("Error creating process wait: %s", err)
 	}
 
-	log.Printf("<< Exited console :%s\n", state.String())
+	log.Printf("<< Custom command exited with code :%s\n", state.String())
 
 	return success
 }
