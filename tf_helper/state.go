@@ -25,6 +25,7 @@ type Config struct {
 	TFLockLegacy     bool
 	TFenv            string
 	Region           string
+	TypeTF           []string
 }
 
 func (c *Config) Create_bucket(client interface{}) bool {

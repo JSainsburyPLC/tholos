@@ -187,6 +187,8 @@ The tool accepts the following parameters:
   -t  Terraform resources to target only, (-t resourcetype.resource resourcetype2.resource2)
   -u	Fetch and update modules from remote repo
   -destroy	Terraform destroy
+  -c	Terraform custom commands with/without args e.g.
+  `tholos -c graph` (Optional: Type of graph output: 'tholos -c graph -type plan|plan-destroy|-apply|refresh|validate'. Max module depth: '-type n', where n is numeric. Highlight cycles with coloured edges: '-type cycles').
 
 ```
 

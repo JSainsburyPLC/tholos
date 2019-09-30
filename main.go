@@ -43,6 +43,7 @@ func (d *multiflag) Set(value string) error {
 }
 
 var targetsTF multiflag
+var typeTF multiflag
 
 const CLR_0 = "\x1b[30;1m"
 const CLR_R = "\x1b[31;1m"
@@ -65,6 +66,7 @@ func main() {
 	modulesPtr := flag.Bool("u", false, "Fetch and update modules from remote repo")
 	outputsPtr := flag.Bool("o", false, "Display Terraform outputs")
 	destroyPtr := flag.Bool("destroy", false, "Terraform Destroy")
+	customPtr := flag.Bool("c", false, "Pass custom command and arguments to Terraform")
 	envPtr := flag.String("e", "", "Terraform state environment to use")
 	flag.Var(&targetsTF, "t", "Terraform resources to target only, (-t resourcetype.resource resourcetype2.resource2)")
 
@@ -75,7 +77,7 @@ func main() {
 		Tf_modules_dir:      "tfmodules",
 	}
 
-	if !*planPtr && !*initPtr && !*modulesPtr && !*outputsPtr && !*applyPtr && !*destroyPtr {
+	if !*planPtr && !*initPtr && !*modulesPtr && !*outputsPtr && !*applyPtr && !*destroyPtr && !*customPtr {
 		fmt.Println("Please provide one of the following parameters:")
 		flag.PrintDefaults()
 		os.Exit(0)
@@ -188,6 +190,7 @@ func main() {
 		TFlegacy:         tf_legacy,
 		TFLockLegacy:     tf_lock_legacy,
 		TFenv:            *envPtr,
+		TypeTF:           typeTF,
 	}
 
 	var tf_parallelism int16 = 10
@@ -272,6 +275,8 @@ func main() {
 		state_config.Apply()
 	} else if *destroyPtr {
 		state_config.Destroy(tf_parallelism)
+	} else if *customPtr {
+		state_config.Custom(os.Args[2:])
 	}
 
 }
