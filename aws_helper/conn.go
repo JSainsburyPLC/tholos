@@ -143,6 +143,10 @@ func (c *Config) Connect() interface{} {
 
 		os.Setenv("AWS_ACCESS_KEY_ID", profile_creds.AccessKeyID)
 		os.Setenv("AWS_SECRET_ACCESS_KEY", profile_creds.SecretAccessKey)
+		if len(profile_creds.SessionToken) > 0 {
+			os.Setenv("AWS_SECURITY_TOKEN", profile_creds.SessionToken)
+			os.Setenv("AWS_SESSION_TOKEN", profile_creds.SessionToken)
+		}
 		os.Setenv("AWS_DEFAULT_REGION", c.Region)
 	}
 
