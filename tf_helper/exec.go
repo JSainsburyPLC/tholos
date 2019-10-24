@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 )
 
 func ExecCmd(cmdName string, args []string) bool {
@@ -18,6 +19,9 @@ func ExecCmd(cmdName string, args []string) bool {
 	cmd := exec.Command(cmdName, args...)
 
 	cmdReader, err := cmd.StdoutPipe()
+
+	var wg sync.WaitGroup
+
 	if err != nil {
 		success = false
 		log.Printf("Error creating StdoutPipe for Command: %s, Error: %s\n", cmdName, err.Error())
@@ -29,18 +33,26 @@ func ExecCmd(cmdName string, args []string) bool {
 		log.Printf("Error creating StderrPipe for Command: %s, Error: %s\n", cmdName, err.Error())
 	}
 
+	wg.Add(1)
+
 	scanner := bufio.NewScanner(cmdReader)
 	go func() {
 		for scanner.Scan() {
 			fmt.Println(scanner.Text())
 		}
+
+		wg.Done()
 	}()
+
+	wg.Add(1)
 
 	errorScanner := bufio.NewScanner(cmdErrorReader)
 	go func() {
 		for errorScanner.Scan() {
 			fmt.Println(errorScanner.Text())
 		}
+
+		wg.Done()
 	}()
 
 	err = cmd.Start()
@@ -54,6 +66,8 @@ func ExecCmd(cmdName string, args []string) bool {
 		success = false
 		log.Printf("Error waiting for Command: %s, Error: %s\n", cmdName, err.Error())
 	}
+
+	wg.Wait()
 
 	return success
 
