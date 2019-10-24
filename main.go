@@ -55,6 +55,8 @@ const CLR_C = "\x1b[36;1m"
 const CLR_W = "\x1b[37;1m"
 const CLR_N = "\x1b[0m"
 
+const THOLOS_VERSION = "2.3.1"
+
 func main() {
 
 	use_mfa := true
@@ -78,6 +80,7 @@ func main() {
 	}
 
 	if !*planPtr && !*initPtr && !*modulesPtr && !*outputsPtr && !*applyPtr && !*destroyPtr && !*customPtr {
+		fmt.Printf("Tholos %s\n", THOLOS_VERSION)
 		fmt.Println("Please provide one of the following parameters:")
 		flag.PrintDefaults()
 		os.Exit(0)
@@ -121,6 +124,8 @@ func main() {
 
 	project_config.environment = tmp[len(tmp)-1]
 	project_config.account = tmp[len(tmp)-2]
+
+	fmt.Printf("%sTholos %s\n", CLR_G, THOLOS_VERSION)
 
 	fmt.Printf("%sWORKING ON AWS account: %s and environment: %s\nUsing shared credentials profile %s and assuming IAM role %s on AWS account with ID %s\n", CLR_G, project_config.account, project_config.environment, project_config.Accounts[project_config.account].Profile, project_config.Accounts[project_config.account].RoamRole, project_config.Accounts[project_config.account].AccountID)
 
@@ -316,7 +321,7 @@ func get_tf_version() string {
 
 	start := strings.Index(out_str, "v")
 
-	ver := out_str[start : start+7]
+	ver := strings.TrimSuffix(out_str[start:start+8], "\n")
 
 	return ver
 }
