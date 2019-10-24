@@ -321,7 +321,7 @@ func get_tf_version() string {
 
 	start := strings.Index(out_str, "v")
 
-	ver := out_str[start : start+7]
+	ver := strings.TrimSuffix(out_str[start:start+8], "\n")
 
 	return ver
 }
